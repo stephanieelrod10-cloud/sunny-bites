@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#ffb84d">
+<title>Sunny Bites — Restaurant Idle</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#ffb84d">
+<meta name="description" content="Tap, earn coins, hire workers, and grow your own cute cartoon restaurant in Sunny Bites!">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+
+<style>
+:root{--ink:#263858;--blue:#2f68a8;--blue2:#4b8bd2;--cream:#fff7e7;--yellow:#ffd447;--orange:#ff974d;--green:#48c95a;--pink:#ff7fa5;--shadow:0 5px 0 #233b5c35}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#ffe7a8,#ffb9a8 55%,#a9ddf4);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer;touch-action:manipulation;border:0;color:inherit}
+.app{max-width:520px;margin:0 auto;min-height:100vh;padding:12px 12px 20px}
+.top{display:flex;align-items:center;gap:9px;justify-content:space-between;background:#263858;color:white;padding:11px 13px;border-radius:22px;border:3px solid #fff8e7;box-shadow:var(--shadow)}
+.coin-icon{width:48px;height:48px;display:grid;place-items:center;background:linear-gradient(#ffe879,#ffae18);border:3px solid #fff5b0;border-radius:50%;font-size:27px;box-shadow:0 3px 0 #b36d1b}
+.money{font-weight:900;font-size:clamp(22px,6vw,30px);line-height:1.05}.rate{color:#ffe35b;font-size:12px;font-weight:800}.gems{white-space:nowrap;font-weight:800;font-size:14px;background:#ffffff18;padding:8px;border-radius:13px}
+h1{font-size:25px;margin:14px 0 0;text-align:center;color:#fff;text-shadow:0 3px 0 #c86e47,0 5px 0 #854b4b}
+.sub{text-align:center;font-size:12px;font-weight:800;color:#7b4b45;margin:0 0 10px}
+.restaurant{position:relative;overflow:hidden;border:4px solid white;border-radius:25px;background:linear-gradient(135deg,#ffe8bf,#f9c98a);box-shadow:var(--shadow);min-height:250px;padding:13px}
+.wall{position:absolute;inset:0 0 45% 0;background:repeating-linear-gradient(90deg,#ffe8c5 0 42px,#f5c99a 42px 45px);border-bottom:6px solid #d58a55}
+.window{position:absolute;top:13px;right:13px;width:78px;height:61px;border:5px solid #b86d47;border-radius:9px;background:linear-gradient(#93dff6 0 65%,#a9db83 65%);box-shadow:inset 0 0 0 3px #fff7dc}
+.sign{position:absolute;top:17px;left:14px;background:#365b59;color:#fff2c9;border:3px solid #fff0cf;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:900;transform:rotate(-3deg)}
+.floor{position:absolute;inset:55% 0 0;background:repeating-linear-gradient(0deg,#f4c57d 0 27px,#eeb96d 27px 30px),repeating-linear-gradient(90deg,transparent 0 37px,#dfaa65 37px 40px)}
+.kitchen{position:relative;margin:58px auto 0;width:76%;height:73px;background:linear-gradient(#e8a55c,#bf7042);border:4px solid #fff1ce;border-radius:13px;box-shadow:0 6px 0 #9c5c3d;display:flex;align-items:center;justify-content:space-around;z-index:2}
+.grill{width:54%;height:38px;border:4px solid #566274;border-radius:8px;background:repeating-linear-gradient(90deg,#3b4659 0 10px,#596779 10px 13px);display:flex;align-items:center;justify-content:space-evenly;font-size:19px}
+.chef{font-size:36px;filter:drop-shadow(0 2px 0 #fff);transform:translateY(-8px)}
+.table-row{position:relative;z-index:2;display:flex;justify-content:space-around;margin-top:13px;gap:7px}
+.table{width:30%;height:47px;background:#c87b47;border:4px solid #f7d69a;border-radius:10px;box-shadow:0 4px 0 #9c5c3d;display:grid;place-items:center;font-size:24px;position:relative}
+.table:after{content:"";position:absolute;bottom:-10px;width:7px;height:10px;background:#995c3c;left:12px;box-shadow:30px 0 #995c3c}
+.customer{position:absolute;z-index:4;font-size:25px;animation:bob 2.4s ease-in-out infinite;filter:drop-shadow(0 2px 0 #fff)}
+.c1{left:8%;bottom:20px}.c2{right:10%;bottom:26px;animation-delay:.6s}.c3{left:44%;bottom:2px;animation-delay:1s}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.tap-area{display:flex;align-items:center;justify-content:center;gap:12px;margin:14px 0}
+.tapcoin{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 35% 25%,#fff18a,#ffc52e 58%,#f29a18);border:7px solid #fff1a8;box-shadow:0 7px 0 #c27b25,0 0 0 4px #ff9f34;display:grid;place-items:center;font-size:46px;transition:transform .08s}
+.tapcoin:active{transform:scale(.92) translateY(4px);box-shadow:0 3px 0 #c27b25,0 0 0 4px #ff9f34}
+.tapcopy{font-size:13px;font-weight:900;background:#fff9ec;padding:10px 12px;border-radius:14px;max-width:125px;box-shadow:var(--shadow)}
+.float{position:fixed;z-index:99;pointer-events:none;font-weight:1000;color:#fff;background:#38b94e;border:2px solid #fff;border-radius:14px;padding:5px 9px;text-shadow:0 1px 2px #278238;animation:fly .8s ease-out forwards}
+@keyframes fly{to{transform:translateY(-60px);opacity:0}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}
+.stat{background:#fff8e8;border:2px solid #fff;border-radius:15px;padding:8px 5px;text-align:center;box-shadow:0 3px 0 #e7b879;font-size:11px;font-weight:800}
+.stat b{display:block;font-size:17px;color:#db7837}
+.panel{background:#fff9ec;border:3px solid white;border-radius:22px;padding:12px;box-shadow:var(--shadow)}
+.panelhead{display:flex;align-items:center;justify-content:space-between;margin:0 0 9px;font-size:17px;font-weight:1000}
+.items{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.item{background:#fff0d5;border:2px solid #f3d19b;border-radius:15px;padding:10px 9px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.item .emoji{font-size:27px}.item strong{font-size:13px}.item small{font-size:11px;color:#6b6b74;line-height:1.25;min-height:27px}
+.cost{font-size:12px;font-weight:900;color:#9a6322}
+.buy{background:linear-gradient(#5ee26a,#35b94b);border:2px solid #23963a;border-radius:11px;padding:8px 6px;color:white;font-size:12px;font-weight:1000;text-shadow:0 1px 1px #21843b;box-shadow:0 3px 0 #208b36}
+.buy:disabled{background:#c6c6c6;border-color:#aaa;box-shadow:0 3px 0 #999;opacity:.7}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.tab{padding:9px 2px;border-radius:13px;background:#2f5689;color:white;border:2px solid #7199c4;font-size:11px;font-weight:900}
+.tab.active{background:#ffd447;color:#304366;border-color:#fff3a0}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#263858;color:white;padding:10px 15px;border-radius:20px;font-size:12px;font-weight:800;box-shadow:var(--shadow);z-index:100;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.bottomnote{text-align:center;font-size:10px;color:#785b5b;margin:10px 0 0}
+@media(min-width:430px){.items{grid-template-columns:repeat(2,1fr)}.restaurant{min-height:275px}.kitchen{margin-top:66px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="coin-icon">🪙</div>
+    <div style="flex:1;min-width:0"><div class="money" id="coins">0</div><div class="rate" id="rate">+0 coins / sec</div></div>
+    <div class="gems">💎 <span id="gems">3</span></div>
+  </div>
+  <h1>🍔 Sunny Bites</h1><div class="sub">TINY RESTAURANT, BIG DREAMS!</div>
+  <section class="restaurant" aria-label="Your cartoon restaurant">
+    <div class="wall"></div><div class="floor"></div><div class="window"></div>
+    <div class="sign">GOOD FOOD<br>HAPPY MOOD ♡</div>
+    <div class="kitchen"><div class="chef" id="chef">👩‍🍳</div><div class="grill">🍳 🍔 🥞</div><div style="font-size:23px">🥤</div></div>
+    <div class="table-row" id="tables"><div class="table">🍟</div><div class="table">🍔</div><div class="table">🥗</div></div>
+    <div class="customer c1">🧑🏻</div><div class="customer c2">👩🏽</div><div class="customer c3">🧒🏼</div>
+  </section>
+  <div class="tap-area"><button class="tapcoin" id="tap" aria-label="Tap to earn coins">👑</button><div class="tapcopy">TAP TO EARN<br><span style="color:#d98324;font-size:18px">+<span id="tapvalue">1</span> coins!</span><br><small style="font-size:10px">Every tap helps 🍟</small></div></div>
+  <div class="stats">
+    <div class="stat">⭐ RESTAURANT LEVEL<b id="level">1</b></div>
+    <div class="stat">🍽️ TABLES<b id="tablecount">3</b></div>
+    <div class="stat">👩‍🍳 TEAM<b id="teamcount">1</b></div>
+  </div>
+  <section class="panel">
+    <div class="panelhead"><span id="sectiontitle">🛠️ Upgrade your restaurant</span><span style="font-size:11px;color:#9b7445" id="progress">0 / 100 XP</span></div>
+    <div class="items" id="items"></div>
+  </section>
+  <div class="tabs">
+    <button class="tab active" data-tab="upgrades">🛠️<br>Upgrades</button>
+    <button class="tab" data-tab="restaurant">🍽️<br>Restaurant</button>
+    <button class="tab" data-tab="staff">👩‍🍳<br>Staff</button>
+    <button class="tab" data-tab="menu">🍔<br>Menu</button>
+  </div>
+  <div class="bottomnote">Your restaurant saves automatically on this device 💛</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const defaults={coins:0,gems:3,taps:0,level:1,xp:0,tables:3,workers:1,speed:1,chef:1,menu:1,decor:0,earned:0,last:Date.now()};
+let s={...defaults};
+try{const saved=JSON.parse(localStorage.getItem('sunnyBitesSave'));if(saved&&typeof saved==='object')s={...defaults,...saved}}catch(e){}
+let tab='upgrades', toastTimer;
+const fmt=n=>Math.floor(n).toLocaleString('en-US');
+const rate=()=>Math.floor(s.tables*1.2+s.workers*2+s.speed*1.5+s.chef*1.2+s.menu*.8);
+const tapValue=()=>Math.max(1,s.level+s.speed+s.menu-1);
+const cost=(base,lvl)=>Math.floor(base*Math.pow(1.62,lvl-1));
+function save(markTime=false){if(markTime)s.last=Date.now();try{localStorage.setItem('sunnyBitesSave',JSON.stringify(s))}catch(e){}}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),1800)}
+function addCoins(n,withXp=true){s.coins+=n;s.earned+=n;if(withXp){s.xp+=Math.max(1,Math.floor(n/3));while(s.xp>=s.level*100){s.xp-=s.level*100;s.level++;toast('🎉 Restaurant level '+s.level+'!')}}renderTop();save()}
+const catalog={
+ upgrades:[
+ {key:'speed',icon:'⚡',name:'Service Speed',desc:'Serve customers faster.',base:35,field:'speed',gain:()=>`+1 speed level`},
+ {key:'chef',icon:'👩‍🍳',name:'Better Chef',desc:'Cook more orders per minute.',base:55,field:'chef',gain:()=>`+1 chef level`},
+ {key:'worker',icon:'🧑‍🍳',name:'Hire a Worker',desc:'More helpers earn more coins.',base:90,field:'workers',gain:()=>`+1 team member`},
+ {key:'table',icon:'🪑',name:'Buy a Table',desc:'Seat more hungry customers.',base:70,field:'tables',gain:()=>`+1 table`},
+ ],
+ restaurant:[
+ {key:'table',icon:'🪑',name:'Buy a Table',desc:'Seat more hungry customers.',base:70,field:'tables',gain:()=>`+1 table`},
+ {key:'decor',icon:'🪴',name:'Cute Decorations',desc:'Make your place extra cozy.',base:120,field:'decor',gain:()=>`+1 cozy decor`},
+ {key:'speed',icon:'⚡',name:'Service Speed',desc:'Serve customers faster.',base:35,field:'speed',gain:()=>`+1 speed level`},
+ {key:'chef',icon:'👩‍🍳',name:'Better Chef',desc:'Cook more orders per minute.',base:55,field:'chef',gain:()=>`+1 chef level`},
+ ],
+ staff:[
+ {key:'worker',icon:'🧑‍🍳',name:'Hire a Worker',desc:'Add a smiling helper to your team.',base:90,field:'workers',gain:()=>`+1 team member`},
+ {key:'chef',icon:'👩‍🍳',name:'Train the Chef',desc:'Improve your chef’s cooking.',base:55,field:'chef',gain:()=>`+1 chef level`},
+ {key:'speed',icon:'⚡',name:'Quick Service',desc:'Help the whole team move faster.',base:35,field:'speed',gain:()=>`+1 speed level`},
+ ],
+ menu:[
+ {key:'menu',icon:'🍕',name:'New Menu Item',desc:'Unlock tastier dishes and earn more.',base:100,field:'menu',gain:()=>`+1 menu level`},
+ {key:'chef',icon:'🥞',name:'Chef Special',desc:'Teach your chef a new recipe.',base:55,field:'chef',gain:()=>`+1 chef level`},
+ {key:'table',icon:'🍽️',name:'More Seating',desc:'Welcome more food fans.',base:70,field:'tables',gain:()=>`+1 table`},
+ ]
+};
+function currentLevel(item){return item.field==='tables'?s.tables:item.field==='workers'?s.workers:item.field==='speed'?s.speed:item.field==='chef'?s.chef:item.field==='menu'?s.menu:s.decor}
+function itemCost(item){return cost(item.base,Math.max(1,currentLevel(item)))}
+function buy(item){const c=itemCost(item);if(s.coins<c){toast('💰 Need '+fmt(c-s.coins)+' more coins!');return}if(item.field==='tables'&&s.tables>=20){toast('Your dining room is full for now!');return}if(item.field==='workers'&&s.workers>=15){toast('Your team is fully staffed!');return}s.coins-=c;s[item.field]++;s.xp+=15;while(s.xp>=s.level*100){s.xp-=s.level*100;s.level++;toast('🎉 Restaurant level '+s.level+'!')}toast(item.icon+' '+item.name+' upgraded!');render();save()}
+function renderTop(){$('coins').textContent=fmt(s.coins);$('rate').textContent='+'+fmt(rate())+' coins / sec';$('gems').textContent=s.gems;$('tapvalue').textContent=fmt(tapValue());$('level').textContent=s.level;$('tablecount').textContent=s.tables;$('teamcount').textContent=s.workers;$('progress').textContent=fmt(s.xp)+' / '+fmt(s.level*100)+' XP';$('chef').textContent=s.workers>2?'👩‍🍳👨‍🍳':'👩‍🍳';$('tables').innerHTML=Array.from({length:Math.min(5,s.tables)},(_,i)=>`<div class="table">${['🍟','🍔','🥗','🍕','🧁'][i%5]}</div>`).join('')}
+function renderItems(){const items=catalog[tab]||catalog.upgrades;$('items').innerHTML=items.map((it,i)=>{let c=itemCost(it),lvl=currentLevel(it),disabled=s.coins<c||((it.field==='tables'&&s.tables>=20)||(it.field==='workers'&&s.workers>=15));return `<article class="item"><div class="emoji">${it.icon}</div><strong>${it.name} <span style="color:#b8844c">Lv.${lvl}</span></strong><small>${it.desc}</small><div class="cost">🪙 ${fmt(c)}</div><button class="buy" data-buy="${i}" ${disabled?'disabled':''}>${disabled?'Need more coins':'Upgrade!'}</button></article>`}).join('');$('items').querySelectorAll('[data-buy]').forEach(btn=>btn.addEventListener('click',()=>buy(items[Number(btn.dataset.buy)])))}
+function render(){renderTop();renderItems();document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('sectiontitle').textContent=({upgrades:'🛠️ Upgrade your restaurant',restaurant:'🍽️ Build your restaurant',staff:'👩‍🍳 Grow your team',menu:'🍔 Expand your menu'})[tab]}
+$('tap').addEventListener('click',()=>{const n=tapValue();addCoins(n);s.taps++;const el=document.createElement('div');el.className='float';el.textContent='+'+n+' 🪙';el.style.left=(Math.max(8,Math.min(78,Math.random()*65+15)))+'%';el.style.top=(window.innerHeight*.48)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),850);renderItems()});
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{tab=b.dataset.tab;render()}));
+const away=Math.min(4*60*60,Math.max(0,Math.floor((Date.now()-(s.last||Date.now()))/1000)));if(away>5){const bonus=away*rate();s.coins+=bonus;s.earned+=bonus;setTimeout(()=>toast('Welcome back! You earned '+fmt(bonus)+' coins while away 🥳'),300)}
+setInterval(()=>{addCoins(rate(),false);renderItems()},1000);
+setInterval(save,5000);
+window.addEventListener('beforeunload',()=>save(true));window.addEventListener('pagehide',()=>save(true));
+render();save();
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
